@@ -450,14 +450,16 @@ export class FilterManager {
     }
 
     private putIntoGui(filterWrapper: FilterWrapper): void {
-        let eFilterGui = document.createElement('div');
-        eFilterGui.className = 'ag-filter';
         filterWrapper.filterPromise.then(filter=>{
             let guiFromFilter = filter.getGui();
 
             if (_.missing(guiFromFilter)) {
                 console.warn(`getGui method from filter returned ${guiFromFilter}, it should be a DOM element or an HTML template string.`);
             }
+
+            let ownerDocument = guiFromFilter ? guiFromFilter.ownerDocument : document;
+            let eFilterGui = ownerDocument.createElement('div');
+            eFilterGui.className = 'ag-filter';
 
             // for backwards compatibility with Angular 1 - we
             // used to allow providing back HTML from getGui().
